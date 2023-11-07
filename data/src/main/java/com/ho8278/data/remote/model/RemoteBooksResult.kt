@@ -3,7 +3,7 @@ package com.ho8278.data.remote.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BooksResult(
+data class RemoteBooksResult(
     val error: String,
     val title: String,
     val subtitle: String,
