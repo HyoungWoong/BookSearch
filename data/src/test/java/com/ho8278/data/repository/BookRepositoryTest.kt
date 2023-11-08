@@ -56,10 +56,18 @@ class BookRepositoryTest {
 
     @Test
     fun `검색어가 3개 이상이고 연산자가 2개 이상인 경우 에러를 던진다`() = runBlocking {
-        val query = "android|java|kotlin"
+        val query1 = "android|java|kotlin"
+        val query2 = "android|java-kotlin"
 
         try {
-            repository.searchBook(query)
+            repository.searchBook(query1)
+            assert(false)
+        } catch (ignore: IllegalArgumentException) {
+            assert(true)
+        }
+
+        try {
+            repository.searchBook(query2)
             assert(false)
         } catch (ignore: IllegalArgumentException) {
             assert(true)

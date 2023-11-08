@@ -14,9 +14,14 @@ class BookRepository(private val bookService: BookService) {
      *
      */
     suspend fun searchBook(query: String, page: Int = 1): SearchResult {
-        return if (query.contains("|")) {
+        val isOrOperation = query.contains("|")
+        val isNotOperation = query.contains("-")
+
+        require(!isOrOperation || !isNotOperation) { "Query string format is wrong." }
+
+        return if (isOrOperation) {
             getOrQuery(query, page)
-        } else if (query.contains("-")) {
+        } else if (isNotOperation) {
             getNotQuery(query, page)
         } else {
             getQuery(query, page)
