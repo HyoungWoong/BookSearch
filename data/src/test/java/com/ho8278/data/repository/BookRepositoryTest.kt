@@ -87,9 +87,10 @@ class BookRepositoryTest {
 
         val result = repository.searchBook(query)
 
-        val containsAllAndroid = result.books.all { it.title.contains("android") }
-        val excludeAllJava = result.books.all { !it.title.contains("java") }
+        val containsAllAndroid = result.books.all {
+            it.title.lowercase().contains("android") && !it.title.lowercase().contains("java")
+        }
 
-        assert(containsAllAndroid && excludeAllJava)
+        assert(containsAllAndroid)
     }
 }

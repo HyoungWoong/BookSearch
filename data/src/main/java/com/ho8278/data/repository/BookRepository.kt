@@ -14,9 +14,13 @@ class BookRepository(private val bookService: BookService) {
      *
      */
     suspend fun searchBook(query: String, page: Int = 1): SearchResult {
-        if (query.contains("|")) {
+        return if (query.contains("|")) {
+            getOrQuery(query, page)
+        } else if (query.contains("-")) {
+            getNotQuery(query, page)
+        } else {
+            getQuery(query, page)
         }
-        return getOrQuery(query, page)
     }
 
     private suspend fun getOrQuery(query: String, page: Int): SearchResult = coroutineScope {
@@ -42,25 +46,54 @@ class BookRepository(private val bookService: BookService) {
                 booksList
             )
         } else if (queries.size == 1) {
+            getQuery(queries[0], page)
+        } else {
+            SearchResult(0, page, emptyList())
+        }
+    }
+
+    private suspend fun getNotQuery(query: String, page: Int): SearchResult {
+        val queries = query.split("-")
+            .filter { it.isNotEmpty() }
+            .map { it.trim() }
+
+        require(queries.size < 3) { "Query string format is wrong." }
+
+        return if (queries.size == 2) {
             val queryResult = bookService.searchBook(queries[0], page)
+
+            val booksList = queryResult.books.filter { !it.title.contains(queries[1]) }
+                .map { Book(it.title, it.subtitle, it.isbn13, it.price, it.image, it.url) }
 
             SearchResult(
                 queryResult.total,
                 page,
-                queryResult.books.map {
-                    Book(
-                        it.title,
-                        it.subtitle,
-                        it.isbn13,
-                        it.price,
-                        it.image,
-                        it.url
-                    )
-                }
+                booksList
             )
+        } else if (queries.size == 1) {
+            getQuery(queries[0], page)
         } else {
             SearchResult(0, page, emptyList())
         }
+    }
+
+    private suspend fun getQuery(query: String, page: Int): SearchResult {
+        val queryResult = bookService.searchBook(query, page)
+
+        return SearchResult(
+            queryResult.total,
+            page,
+            queryResult.books.map {
+                Book(
+                    it.title,
+                    it.subtitle,
+                    it.isbn13,
+                    it.price,
+                    it.image,
+                    it.url
+                )
+            }
+        )
     }
 
     suspend fun getBookDetail(isbn: String): BooksResult {
