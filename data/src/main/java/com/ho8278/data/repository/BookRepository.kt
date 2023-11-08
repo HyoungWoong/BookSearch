@@ -11,8 +11,10 @@ import kotlin.math.max
 
 class BookRepository(private val bookService: BookService) {
     /**
-     * [query] 는 or 와 not 연산을 지원한다. 검색어는 최대 2개를 사용할 수 있다.
+     * [query] 는 or(|) 와 not(-) 연산을 지원한다. 검색어는 최대 2개를 사용할 수 있다.
      *
+     * @param query 검색어.
+     * @param page 검색할 페이지.
      */
     suspend fun searchBook(query: String, page: Int = 1): SearchResult {
         val isOrOperation = query.contains("|")
