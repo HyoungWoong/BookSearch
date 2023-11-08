@@ -4,6 +4,7 @@ import com.ho8278.data.remote.BookService
 import com.ho8278.data.repository.model.Book
 import com.ho8278.data.repository.model.BooksResult
 import com.ho8278.data.repository.model.SearchResult
+import com.ho8278.data.repository.model.toBookResult
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlin.math.max
@@ -102,6 +103,6 @@ class BookRepository(private val bookService: BookService) {
     }
 
     suspend fun getBookDetail(isbn: String): BooksResult {
-        return BooksResult("", "", "", "", "", "", "", "", "", "", "", "", "", "")
+        return bookService.getBookDetail(isbn).toBookResult()
     }
 }
