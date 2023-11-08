@@ -1,9 +1,9 @@
 package com.ho8278.data.repository
 
 import com.ho8278.data.remote.BookService
-import com.ho8278.data.repository.model.Book
 import com.ho8278.data.repository.model.BooksResult
 import com.ho8278.data.repository.model.SearchResult
+import com.ho8278.data.repository.model.toBook
 import com.ho8278.data.repository.model.toBookResult
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -44,7 +44,7 @@ class BookRepository(private val bookService: BookService) {
             val querySecondResult = querySecond.await()
 
             val booksList = (queryFirstResult.books + querySecondResult.books).sortedBy { it.title }
-                .map { Book(it.title, it.subtitle, it.isbn13, it.price, it.image, it.url) }
+                .map { it.toBook() }
 
             SearchResult(
                 max(queryFirstResult.total, querySecondResult.total),
@@ -69,7 +69,7 @@ class BookRepository(private val bookService: BookService) {
             val queryResult = bookService.searchBook(queries[0], page)
 
             val booksList = queryResult.books.filter { !it.title.contains(queries[1]) }
-                .map { Book(it.title, it.subtitle, it.isbn13, it.price, it.image, it.url) }
+                .map { it.toBook() }
 
             SearchResult(
                 queryResult.total,
@@ -89,16 +89,7 @@ class BookRepository(private val bookService: BookService) {
         return SearchResult(
             queryResult.total,
             page,
-            queryResult.books.map {
-                Book(
-                    it.title,
-                    it.subtitle,
-                    it.isbn13,
-                    it.price,
-                    it.image,
-                    it.url
-                )
-            }
+            queryResult.books.map { it.toBook() }
         )
     }
 
