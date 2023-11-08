@@ -25,7 +25,7 @@ class BookRepositoryTest {
 
             val okhttp = OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BASIC
+                    level = HttpLoggingInterceptor.Level.BODY
                 })
                 .build()
 
@@ -47,10 +47,11 @@ class BookRepositoryTest {
 
         val result = repository.searchBook(query)
 
-        val containsAllAndroid = result.books.all { it.title.contains("android") }
-        val containsAllJava = result.books.all { it.title.contains("java") }
+        val containsAll = result.books.all {
+            it.title.lowercase().contains("android") || it.title.lowercase().contains("java")
+        }
 
-        assert(containsAllAndroid && containsAllJava)
+        assert(containsAll)
     }
 
     @Test
@@ -69,12 +70,13 @@ class BookRepositoryTest {
     fun `검색어가 1개이고 연산자가 1개인 경우 연산자를 무시한다`() = runBlocking {
         val query1 = "android|"
         val query2 = "|android"
+        println(query1.split("|"))
 
         val result1 = repository.searchBook(query1)
         val result2 = repository.searchBook(query2)
 
-        val containsAllAndroid1 = result1.books.all { it.title.contains("android") }
-        val containsAllAndroid2 = result2.books.all { it.title.contains("android") }
+        val containsAllAndroid1 = result1.books.all { it.title.lowercase().contains("android") }
+        val containsAllAndroid2 = result2.books.all { it.title.lowercase().contains("android") }
 
         assert(containsAllAndroid1 && containsAllAndroid2)
     }

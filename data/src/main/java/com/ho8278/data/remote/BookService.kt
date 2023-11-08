@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface BookService {
     @GET("search/{query}/{page}")
-    suspend fun searchBook(@Path("query") query: String, @Path("page") path: Int = 0): RemoteSearchResult
+    suspend fun searchBook(@Path("query") query: String, @Path("page") path: Int = 1): RemoteSearchResult
 
     @GET("books/{isbn}")
     suspend fun getBookDetail(@Path("isbn") isbn: String): RemoteBooksResult
