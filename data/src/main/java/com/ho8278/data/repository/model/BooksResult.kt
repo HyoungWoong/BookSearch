@@ -1,5 +1,7 @@
 package com.ho8278.data.repository.model
 
+import com.ho8278.data.remote.model.RemoteBooksResult
+
 data class BooksResult(
     val title: String,
     val subtitle: String,
@@ -17,3 +19,23 @@ data class BooksResult(
     val url: String,
     val pdf: Map<String, String> = emptyMap()
 )
+
+internal fun RemoteBooksResult.toBookResult(): BooksResult {
+    return BooksResult(
+        title,
+        subtitle,
+        authors,
+        publisher,
+        language,
+        isbn10,
+        isbn13,
+        pages,
+        year,
+        rating,
+        desc,
+        price,
+        image,
+        url,
+        pdf
+    )
+}

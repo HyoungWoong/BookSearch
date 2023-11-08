@@ -1,5 +1,7 @@
 package com.ho8278.data.repository.model
 
+import com.ho8278.data.remote.model.RemoteBook
+
 data class Book(
     val title: String,
     val subtitle: String,
@@ -8,3 +10,7 @@ data class Book(
     val image: String,
     val url: String
 )
+
+internal fun RemoteBook.toBook(): Book {
+    return Book(title, subtitle, isbn13, price, image, url)
+}
