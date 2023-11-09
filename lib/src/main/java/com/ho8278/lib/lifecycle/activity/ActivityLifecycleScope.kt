@@ -6,7 +6,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-class ActivityLifecycleScope(
+internal class ActivityLifecycleScope(
     private val lifecycleStateHolder: LifecycleHolder<ActivityLifecycle>,
     private val endFunction: (ActivityLifecycle) -> ActivityLifecycle,
 ) : LifecycleScope {

@@ -6,7 +6,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-class ViewModelScope(
+internal class ViewModelScope(
     private val lifecycleStateHolder: LifecycleHolder<ViewModelLifecycle>,
     private val endFunction: (ViewModelLifecycle) -> ViewModelLifecycle,
 ) : LifecycleScope {
