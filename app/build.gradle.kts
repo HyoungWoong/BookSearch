@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.ho8278.booksearch"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.ho8278.booksearch"
