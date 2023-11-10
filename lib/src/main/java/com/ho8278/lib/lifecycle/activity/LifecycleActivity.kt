@@ -11,7 +11,7 @@ open class LifecycleActivity : AppCompatActivity(), LifecycleHolder<ActivityLife
     private val lifecycleStateHolder = LifecycleStateHolder(ActivityLifecycle.CREATE)
     override fun currentLifecycle(): ActivityLifecycle = lifecycleStateHolder.currentLifecycle()
 
-    override fun getLifecycle(): Flow<ActivityLifecycle> = lifecycleStateHolder.getLifecycle()
+    override fun getLifecycleFlow(): Flow<ActivityLifecycle> = lifecycleStateHolder.getLifecycleFlow()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

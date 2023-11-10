@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface LifecycleHolder<T> {
     fun currentLifecycle(): T
-    fun getLifecycle(): Flow<T>
+    fun getLifecycleFlow(): Flow<T>
 }

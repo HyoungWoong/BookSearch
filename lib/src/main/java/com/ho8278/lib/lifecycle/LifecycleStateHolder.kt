@@ -9,7 +9,7 @@ class LifecycleStateHolder<T>(startState: T) : LifecycleHolder<T> {
 
     override fun currentLifecycle(): T = lifecycleHolder.value
 
-    override fun getLifecycle(): Flow<T> = lifecycleHolder
+    override fun getLifecycleFlow(): Flow<T> = lifecycleHolder
 
     fun onLifecycle(value: T) {
         lifecycleHolder.tryEmit(value)

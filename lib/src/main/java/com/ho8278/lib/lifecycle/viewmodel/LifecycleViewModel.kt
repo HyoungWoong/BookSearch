@@ -10,7 +10,7 @@ open class LifecycleViewModel : ViewModel(), LifecycleHolder<ViewModelLifecycle>
     private val lifecycleStateHolder = LifecycleStateHolder(ViewModelLifecycle.CREATE)
     override fun currentLifecycle(): ViewModelLifecycle = lifecycleStateHolder.currentLifecycle()
 
-    override fun getLifecycle(): Flow<ViewModelLifecycle> = lifecycleStateHolder.getLifecycle()
+    override fun getLifecycleFlow(): Flow<ViewModelLifecycle> = lifecycleStateHolder.getLifecycleFlow()
 
     override fun onCleared() {
         super.onCleared()

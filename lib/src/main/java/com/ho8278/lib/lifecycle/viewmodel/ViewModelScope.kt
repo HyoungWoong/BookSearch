@@ -16,7 +16,7 @@ internal class ViewModelScope(
 
         coroutineScope {
             launch {
-                lifecycleStateHolder.getLifecycle()
+                lifecycleStateHolder.getLifecycleFlow()
                     .collect {
                         if (endState <= it) this.cancel()
                     }
