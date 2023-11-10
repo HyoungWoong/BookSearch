@@ -1,5 +1,6 @@
 package com.ho8278.data.repository
 
+import com.ho8278.data.BookRepository
 import com.ho8278.data.remote.BookService
 import com.ho8278.data.remote.SerializerConverterFactory
 import com.ho8278.lib.serialize.KotlinSerializer
@@ -12,7 +13,7 @@ import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.create
 
-class BookRepositoryTest {
+class BookRepositoryImplTest {
 
     companion object {
         private lateinit var repository: BookRepository
@@ -37,7 +38,7 @@ class BookRepositoryTest {
 
             val bookService: BookService = retrofit.create()
 
-            repository = BookRepository(bookService)
+            repository = BookRepositoryImpl(bookService)
         }
     }
 

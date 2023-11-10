@@ -1,5 +1,6 @@
 package com.ho8278.data.repository
 
+import com.ho8278.data.BookRepository
 import com.ho8278.data.remote.BookService
 import com.ho8278.data.repository.model.BooksResult
 import com.ho8278.data.repository.model.SearchResult
@@ -9,14 +10,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlin.math.max
 
-class BookRepository(private val bookService: BookService) {
+class BookRepositoryImpl(private val bookService: BookService) : BookRepository {
     /**
      * [query] 는 or(|) 와 not(-) 연산을 지원한다. 검색어는 최대 2개를 사용할 수 있다.
      *
      * @param query 검색어.
      * @param page 검색할 페이지.
      */
-    suspend fun searchBook(query: String, page: Int = 1): SearchResult {
+    override suspend fun searchBook(query: String, page: Int): SearchResult {
         val isOrOperation = query.contains("|")
         val isNotOperation = query.contains("-")
 
@@ -95,7 +96,7 @@ class BookRepository(private val bookService: BookService) {
         )
     }
 
-    suspend fun getBookDetail(isbn: String): BooksResult {
+    override suspend fun getBookDetail(isbn: String): BooksResult {
         return bookService.getBookDetail(isbn).toBookResult()
     }
 }
