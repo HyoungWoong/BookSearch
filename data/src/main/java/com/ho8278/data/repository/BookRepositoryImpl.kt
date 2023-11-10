@@ -72,6 +72,7 @@ class BookRepositoryImpl(private val bookService: BookService) : BookRepository 
             val queryResult = bookService.searchBook(queries[0], page)
 
             val booksList = queryResult.books.filter { !it.title.contains(queries[1]) }
+                .sortedBy { it.title }
                 .map { it.toBook() }
 
             SearchResult(
@@ -88,11 +89,13 @@ class BookRepositoryImpl(private val bookService: BookService) : BookRepository 
 
     private suspend fun getQuery(query: String, page: Int): SearchResult {
         val queryResult = bookService.searchBook(query, page)
+        val booksList = queryResult.books.sortedBy { it.title }
+            .map { it.toBook() }
 
         return SearchResult(
             queryResult.total,
             page,
-            queryResult.books.map { it.toBook() }
+            booksList
         )
     }
 
