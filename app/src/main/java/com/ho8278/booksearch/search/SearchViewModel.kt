@@ -6,6 +6,7 @@ import com.ho8278.data.repository.model.SearchResult
 import com.ho8278.lib.lifecycle.viewmodel.LifecycleViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,9 +15,15 @@ class SearchViewModel @Inject constructor(
     private val bookRepository: BookRepository
 ) : LifecycleViewModel() {
 
-    val books = MutableStateFlow<SearchResult?>(null)
+    private val books = MutableStateFlow<SearchResult?>(null)
 
     val searchText = MutableStateFlow("")
+
+    val booksList = books.map { searchResult ->
+        searchResult?.books.orEmpty()
+            .flatMap { listOf(ItemHolder.BookEntry(it), ItemHolder.Divider) }
+            .dropLast(1)
+    }
 
     fun loadFirst(query: String) {
         viewModelScope.launch {

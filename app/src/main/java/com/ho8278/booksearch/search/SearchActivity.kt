@@ -13,14 +13,16 @@ class SearchActivity : LifecycleActivity() {
 
     private val binding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
     private val viewModel by viewModels<SearchViewModel>()
+    private val booksAdapter by lazy { BooksAdapter { println(it.toString()) } }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        viewModel.books
+        binding.recyclerView.adapter = booksAdapter
+
+        viewModel.booksList
             .onEach {
-                println(it?.books?.size)
-                viewModel.loadMore()
+                booksAdapter.submitList(it)
             }
             .untilLifecycle(this)
 
