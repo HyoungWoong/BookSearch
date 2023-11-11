@@ -1,5 +1,6 @@
 package com.ho8278.booksearch.search
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
 import com.ho8278.data.BookRepository
 import com.ho8278.data.repository.model.SearchResult
@@ -15,7 +16,8 @@ class SearchViewModel @Inject constructor(
     private val bookRepository: BookRepository
 ) : LifecycleViewModel() {
 
-    private val books = MutableStateFlow<SearchResult?>(null)
+    @VisibleForTesting
+    val books = MutableStateFlow<SearchResult?>(null)
 
     val searchText = MutableStateFlow("")
 
