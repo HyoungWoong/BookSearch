@@ -1,16 +1,21 @@
 package com.ho8278.data.repository
 
+import androidx.collection.LruCache
 import com.ho8278.data.BookRepository
 import com.ho8278.data.remote.BookService
 import com.ho8278.data.repository.model.BooksResult
 import com.ho8278.data.repository.model.SearchResult
 import com.ho8278.data.repository.model.toBook
 import com.ho8278.data.repository.model.toBookResult
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlin.math.max
 
 class BookRepositoryImpl(private val bookService: BookService) : BookRepository {
+
+    private val bookCache = LruCache<String, BooksResult>(30)
+
     /**
      * [query] 는 or(|) 와 not(-) 연산을 지원한다. 검색어는 최대 2개를 사용할 수 있다.
      *
@@ -100,6 +105,14 @@ class BookRepositoryImpl(private val bookService: BookService) : BookRepository 
     }
 
     override suspend fun getBookDetail(isbn: String): BooksResult {
-        return bookService.getBookDetail(isbn).toBookResult()
+        val cachedValue = bookCache.get(isbn)
+
+        return if (cachedValue == null) {
+            val bookDetail = bookService.getBookDetail(isbn).toBookResult()
+            bookCache.put(isbn, bookDetail)
+            bookDetail
+        } else {
+            cachedValue
+        }
     }
 }
