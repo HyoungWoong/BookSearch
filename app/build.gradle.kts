@@ -56,7 +56,7 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

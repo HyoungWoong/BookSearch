@@ -2,6 +2,7 @@ package com.ho8278.booksearch.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.ho8278.booksearch.R
 import com.ho8278.booksearch.databinding.ItemBookBinding
 import com.ho8278.booksearch.databinding.ItemDividerBinding
@@ -68,6 +69,10 @@ class BookViewHolder(
         binding.subtitle.text = appContext.getString(R.string.subtitle, item.book.subtitle)
         binding.isbnNumber.text = appContext.getString(R.string.isbn, item.book.isbn13)
         binding.price.text = appContext.getString(R.string.price, item.book.price)
+
+        Glide.with(binding.image)
+            .load(item.book.image)
+            .into(binding.image)
     }
 }
 
