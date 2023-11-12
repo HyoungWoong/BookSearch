@@ -28,6 +28,10 @@ class SearchActivity : LifecycleActivity() {
     }
 
     private fun initEdiText() {
+        if (viewModel.searchText.value.isNotEmpty()) {
+            binding.search.setText(viewModel.searchText.value)
+        }
+
         binding.search.textChanges()
             .debounce(500L)
             .onEach { viewModel.loadFirst(it) }
