@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
 import com.ho8278.data.BookRepository
 import com.ho8278.data.repository.model.SearchResult
+import com.ho8278.lib.error.forCoroutine
 import com.ho8278.lib.lifecycle.viewmodel.LifecycleViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val bookRepository: BookRepository
+    private val bookRepository: BookRepository,
+    private val errorHandler: SearchErrorHandler,
 ) : LifecycleViewModel() {
 
     @VisibleForTesting
@@ -28,7 +30,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun loadFirst(query: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(errorHandler.forCoroutine()) {
             searchText.emit(query)
             if (query.isEmpty()) {
                 books.emit(null)
@@ -40,7 +42,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun loadMore() {
-        viewModelScope.launch {
+        viewModelScope.launch(errorHandler.forCoroutine()) {
             if (books.value == null) return@launch
 
             val currentBooks = books.value!!
