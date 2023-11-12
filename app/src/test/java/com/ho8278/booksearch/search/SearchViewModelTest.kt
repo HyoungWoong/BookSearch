@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito.mock
 
 class SearchViewModelTest {
     private lateinit var viewModel: SearchViewModel
@@ -24,8 +25,10 @@ class SearchViewModelTest {
     @Before
     fun initViewModel() {
         Dispatchers.setMain(StandardTestDispatcher())
-        viewModel = SearchViewModel(repository)
-        loadMoreViewModel = SearchViewModel(loadMoreRepository)
+        val searchErrorHandler = mock(SearchErrorHandler::class.java)
+
+        viewModel = SearchViewModel(repository, searchErrorHandler)
+        loadMoreViewModel = SearchViewModel(loadMoreRepository, searchErrorHandler)
     }
 
     @After
