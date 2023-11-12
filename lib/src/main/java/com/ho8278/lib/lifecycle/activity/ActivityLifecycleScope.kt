@@ -10,7 +10,7 @@ internal class ActivityLifecycleScope(
     private val lifecycleStateHolder: LifecycleHolder<ActivityLifecycle>,
     private val endFunction: (ActivityLifecycle) -> ActivityLifecycle,
 ) : LifecycleScope {
-    override suspend fun whenEnd() {
+    override suspend fun until() {
         val currentLifecycle = lifecycleStateHolder.currentLifecycle()
         val endState = endFunction(currentLifecycle)
 

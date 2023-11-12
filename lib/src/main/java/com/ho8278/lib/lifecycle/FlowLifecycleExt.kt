@@ -14,7 +14,7 @@ fun <T> Flow<T>.untilLifecycle(lifecycleScope: LifecycleScope) = callbackFlow<T>
     }
 
     launch {
-        lifecycleScope.whenEnd()
+        lifecycleScope.until()
         close()
     }
 

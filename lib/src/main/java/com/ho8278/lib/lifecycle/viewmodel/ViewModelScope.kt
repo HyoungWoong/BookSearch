@@ -10,7 +10,7 @@ internal class ViewModelScope(
     private val lifecycleStateHolder: LifecycleHolder<ViewModelLifecycle>,
     private val endFunction: (ViewModelLifecycle) -> ViewModelLifecycle,
 ) : LifecycleScope {
-    override suspend fun whenEnd() {
+    override suspend fun until() {
         val currentLifecycle = lifecycleStateHolder.currentLifecycle()
         val endState = endFunction(currentLifecycle)
 
