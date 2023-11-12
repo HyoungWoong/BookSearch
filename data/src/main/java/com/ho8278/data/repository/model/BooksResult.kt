@@ -1,7 +1,9 @@
 package com.ho8278.data.repository.model
 
 import com.ho8278.data.remote.model.RemoteBooksResult
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BooksResult(
     val title: String,
     val subtitle: String,

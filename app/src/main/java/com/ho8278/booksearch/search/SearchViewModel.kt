@@ -2,11 +2,15 @@ package com.ho8278.booksearch.search
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
+import com.ho8278.booksearch.common.signal.BaseSignal
 import com.ho8278.data.BookRepository
+import com.ho8278.data.repository.model.Book
+import com.ho8278.data.repository.model.BooksResult
 import com.ho8278.data.repository.model.SearchResult
 import com.ho8278.lib.error.forCoroutine
 import com.ho8278.lib.lifecycle.viewmodel.LifecycleViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -22,6 +26,8 @@ class SearchViewModel @Inject constructor(
     val books = MutableStateFlow<SearchResult?>(null)
 
     val searchText = MutableStateFlow("")
+
+    val signals = MutableSharedFlow<BaseSignal>()
 
     val booksList = books.map { searchResult ->
         searchResult?.books.orEmpty()
@@ -62,4 +68,13 @@ class SearchViewModel @Inject constructor(
             }
         }
     }
+
+    fun onClickItem(book: Book) {
+        viewModelScope.launch(errorHandler.forCoroutine()) {
+            val bookResult = bookRepository.getBookDetail(book.isbn13)
+            signals.emit(OpenBookDetail(bookResult))
+        }
+    }
+
+    data class OpenBookDetail(val booksResult: BooksResult) : BaseSignal
 }
