@@ -5,4 +5,9 @@
     <string name="subtitle">Subtitle: %s</string>
     <string name="isbn">ISBN: %s</string>
     <string name="price">Price: %s</string>
+    <string name="year">Year: %s</string>
+    <string name="pages">Pages: %s</string>
+    <string name="rating">Rating: %s</string>
+    <string name="authors">Authors: %s</string>
+    <string name="publisher">Publisher: %s</string>
 </resources>

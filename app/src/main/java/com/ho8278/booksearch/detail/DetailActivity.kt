@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.UnderlineSpan
+import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
+import com.ho8278.booksearch.R
 import com.ho8278.booksearch.databinding.ActivityDetailBinding
 import com.ho8278.data.repository.model.BooksResult
 import com.ho8278.lib.lifecycle.activity.LifecycleActivity
@@ -30,38 +32,52 @@ class DetailActivity : LifecycleActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        loadStartArgs()
+        bindData()
+    }
+
+    private fun loadStartArgs() {
         if (intent.hasExtra(KEY_BOOK_RESULT)) {
             val booksResult = serializer.deserialize<BooksResult>(
                 intent.getStringExtra(KEY_BOOK_RESULT)!!,
                 BooksResult::class.java
             )
-            println(booksResult)
             viewModel.booksResult.tryEmit(booksResult)
         }
+    }
 
+    private fun bindData() {
         viewModel.booksResult
-            .onEach {
-                binding.title.text = it?.title.orEmpty()
-                binding.subtitle.text = it?.subtitle.orEmpty()
-                binding.author.text = it?.authors.orEmpty()
-                binding.publisher.text = it?.publisher.orEmpty()
-                binding.language.text = it?.language.orEmpty()
-                binding.isbn10.text = it?.isbn10.orEmpty()
-                binding.isbn13.text = it?.isbn13.orEmpty()
-                binding.page.text = it?.pages.orEmpty()
-                binding.year.text = it?.year.orEmpty()
-                binding.rating.text = it?.rating.orEmpty()
-                binding.description.text = it?.desc.orEmpty()
-                binding.price.text = it?.price.orEmpty()
+            .onEach { result ->
+                binding.title.text = result?.title.orEmpty()
+                binding.subtitle.text = result?.subtitle.orEmpty()
+                binding.author.text = getString(R.string.authors, result?.authors.orEmpty())
+                binding.publisher.text = getString(R.string.publisher, result?.publisher.orEmpty())
+                binding.language.text = result?.language.orEmpty()
+                binding.isbn10.text = getString(R.string.isbn, result?.isbn10.orEmpty())
+                binding.isbn13.text = getString(R.string.isbn, result?.isbn13.orEmpty())
+                binding.page.text = getString(R.string.pages, result?.pages.orEmpty())
+                binding.year.text = getString(R.string.year, result?.year.orEmpty())
+                binding.rating.text = getString(R.string.rating, result?.rating.orEmpty())
+                binding.description.text = result?.desc.orEmpty()
+                binding.price.text = getString(R.string.price, result?.price.orEmpty())
+
+                binding.goWeb.visibility =
+                    if (result?.url.isNullOrEmpty()) View.GONE else View.VISIBLE
+                binding.goWeb.setOnClickListener {
+                    if (!result?.url.isNullOrEmpty()) {
+                        executeDeeplink(result!!.url)
+                    }
+                }
 
                 binding.pdfList.removeAllViews()
-                it?.pdf?.entries?.forEach { (text, link) ->
+                result?.pdf?.entries?.forEach { (text, link) ->
                     val textView = createLinkText(link, text)
                     binding.pdfList.addView(textView)
                 }
 
                 Glide.with(this)
-                    .load(it?.image)
+                    .load(result?.image)
                     .into(binding.image)
             }
             .untilLifecycle(this)
